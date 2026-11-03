@@ -7,6 +7,43 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Menjalankan aplikasi inventaris
+
+Persyaratan: PHP 8.3 atau lebih baru dan Composer. CSS halaman inventaris disimpan di `public/css`, jadi Node.js tidak diperlukan untuk menjalankan form.
+
+1. Salin `.env.example` menjadi `.env`, lalu pasang dependency dan buat application key:
+
+   ```powershell
+   composer install
+   Copy-Item .env.example .env
+   php artisan key:generate
+   ```
+
+2. Pilih database:
+   - **SQLite (default):** jalankan `php artisan migrate`.
+   - **MySQL/phpMyAdmin:** buat database `db_iventaris`, lalu atur `.env`:
+
+     ```dotenv
+     DB_CONNECTION=mysql
+     DB_HOST=127.0.0.1
+     DB_PORT=3306
+     DB_DATABASE=db_iventaris
+     DB_USERNAME=root
+     DB_PASSWORD=
+     ```
+
+     Sesuaikan username dan password dengan konfigurasi MySQL setempat, lalu jalankan `php artisan migrate`.
+
+3. Jalankan aplikasi:
+
+   ```powershell
+   php artisan serve
+   ```
+
+4. Buka `http://127.0.0.1:8000`. Form dan daftar barang tersedia di halaman tersebut.
+
+File `.env` berisi konfigurasi lokal dan tidak disimpan di GitHub.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

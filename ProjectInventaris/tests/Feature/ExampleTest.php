@@ -2,18 +2,43 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\Item;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     */
-    public function test_the_application_returns_a_successful_response(): void
-    {
-        $response = $this->get('/');
+    use RefreshDatabase;
 
-        $response->assertStatus(200);
+    public function test_inventory_form_saves_items_and_uses_local_css(): void
+    {
+        $this->get('/')
+            ->assertRedirect('/items/create');
+
+        $this->get('/items/create')
+            ->assertOk()
+            ->assertSee('css/inventory.css')
+            ->assertSee('Tambah barang');
+
+        $this->post('/item', [
+            'code' => 'INV-TEST-001',
+            'item_name' => 'Laptop',
+            'category' => 'Elektronik',
+            'stock' => 2,
+            'condition' => 'baik',
+            'room_location' => 'Ruang IT',
+        ])->assertRedirect('/items/create')
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('items', [
+            'code' => 'INV-TEST-001',
+            'item_name' => 'Laptop',
+            'stock' => 2,
+        ]);
+
+        $this->get('/items/create')
+            ->assertOk()
+            ->assertSee('INV-TEST-001')
+            ->assertSee('Laptop');
     }
 }
